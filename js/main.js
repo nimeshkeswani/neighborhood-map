@@ -1,12 +1,15 @@
 var map;
 var markers = [];
 var placesService;
+var infoWindow;
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 37.570750, lng: -122.337088},
 		zoom: 15
 	});
+
+	infoWindow = new google.maps.InfoWindow();
 
 	google.maps.event.addListener(map, 'dragend', function() {
          console.log(map.getBounds());
@@ -16,10 +19,7 @@ function initMap() {
 
 	placesService = new google.maps.places.PlacesService(map);
 
-	//var location = {lat: 37.559525, lng: -122.318206}
-
 	var searchRequest = {
-		//bounds: bounds,
 		location: center,
 		radius: 2000,
 		type: ['restaurant']
@@ -33,33 +33,40 @@ function initMap() {
 		}
 		else {
 			console.log(results);
+			populateList(results);
 			placeMarkers(results);
 		}
 	}
-
-	var infoWindow = new google.maps.InfoWindow();
-
-	function placeMarkers(results) {
-		for (i = 0; i < results.length; i++) {
-
-			var marker = new google.maps.Marker({
-				position: results[i].geometry.location,
-				map: map,
-				//icon: results[i].photos[0].getUrl({'maxWidth': 35, 'maxHeight': 35}),
-				animation: google.maps.Animation.DROP,
-				title: results[i].name
-			})
-
-			markers.push(marker);
-
-			marker.addListener('click', (function(result) {
-				return function() {
-					populateInfoWindow(this, infoWindow, result);
-				}
-			})(results[i]))
-		}
-	}
 	
+}
+
+function populateList(results) {
+	for (i = 0; i < results.length; i++) {
+		var node = document.createElement("li");
+    	var textnode = document.createTextNode(results[i].name);
+    	node.appendChild(textnode);
+		document.getElementById('list-1').appendChild(node);
+	}
+}
+
+function placeMarkers(results) {
+	for (i = 0; i < results.length; i++) {
+
+		var marker = new google.maps.Marker({
+			position: results[i].geometry.location,
+			map: map,
+			animation: google.maps.Animation.DROP,
+			title: results[i].name
+		})
+
+		markers.push(marker);
+
+		marker.addListener('click', (function(result) {
+			return function() {
+				populateInfoWindow(this, infoWindow, result);
+			}
+		})(results[i]))
+	}
 }
 
 function populateInfoWindow(marker, infoWindow, result) {

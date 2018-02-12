@@ -4,6 +4,13 @@ html, body {
 	padding: 0;
 }
 
+#location-list {
+	height: 100%;
+	width: 30%;
+	float: left;
+}
+
 #map {
 	height: 100%;
+	width: 70%;
 }
