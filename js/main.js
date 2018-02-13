@@ -2,25 +2,52 @@ var map;
 var markers = [];
 var placesService;
 var infoWindow;
+var center;
 
+//Function to initialize the map
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 37.570750, lng: -122.337088},
 		zoom: 15
 	});
 
+	center = map.getCenter();
+
 	infoWindow = new google.maps.InfoWindow();
 
-	google.maps.event.addListener(map, 'dragend', function() {
-         console.log(map.getBounds());
-      });
+	//Add an event listener on the "Auto Redo Search" checkbox, to show/hide the "Redo Search" button
+	document.getElementById('auto-redo-search').addEventListener('change', function() {
+ 		if (this.checked) {
+ 			document.getElementById('redo-search').hidden = true;
+ 		} else {
+ 			document.getElementById('redo-search').hidden = false;
+ 		}
+ 	})
 
-	var center = map.getCenter();
+ 	//Add an event listener on the "Redo Search" button to search for places using the new center of the map
+ 	document.getElementById('redo-search').addEventListener('click', function() {
+ 		center = map.getCenter();
+ 		getPlaces(center);
+ 	})
+
+	google.maps.event.addListener(map, 'dragend', function() {
+         center = map.getCenter();
+         autoSearch = document.getElementById('auto-redo-search').checked;
+         if (autoSearch) {
+         	getPlaces(center);
+         }
+     });
 
 	placesService = new google.maps.places.PlacesService(map);
 
+	getPlaces(center);
+}
+
+//Function to get places using Nearby Search from Google JavaScript API
+function getPlaces(location) {
+
 	var searchRequest = {
-		location: center,
+		location: location,
 		radius: 2000,
 		type: ['restaurant']
 	}
@@ -37,10 +64,12 @@ function initMap() {
 			placeMarkers(results);
 		}
 	}
-	
+
 }
 
+//Function to populate the list of places
 function populateList(results) {
+	document.getElementById('list-1').innerHTML = '';
 	for (i = 0; i < results.length; i++) {
 		var node = document.createElement("li");
     	var textnode = document.createTextNode(results[i].name);
@@ -49,7 +78,9 @@ function populateList(results) {
 	}
 }
 
+//Function to place markers on the map
 function placeMarkers(results) {
+	deleteAllMarkers();
 	for (i = 0; i < results.length; i++) {
 
 		var marker = new google.maps.Marker({
@@ -69,6 +100,30 @@ function placeMarkers(results) {
 	}
 }
 
+//Function to set a map on all markers
+function setMapOnAllMarkers(map) {
+	for (var i = 0; i < markers.length; i++) {
+	  markers[i].setMap(map);
+	}
+}
+
+//Function to hide all the markers on the map
+function hideAllMarkers() {
+	setMapOnAllMarkers(null);
+}
+
+//Function to show all markers on the map
+function showAllMarkers() {
+	setMapOnAllMarkers(map);
+}
+
+//Function to delete all markers from the array
+function deleteAllMarkers() {
+	hideAllMarkers();
+	markers = [];
+}
+
+//Function to populate the info window with information
 function populateInfoWindow(marker, infoWindow, result) {
 
 	getPlaceDetails(result.place_id);
@@ -85,7 +140,8 @@ function populateInfoWindow(marker, infoWindow, result) {
 	}
 	
 }
-	
+
+//Function to get place details from Google Place Details API
 function getPlaceDetails(placeId) {
 
 	detailsRequest = {
