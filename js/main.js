@@ -6,6 +6,7 @@ var placesService;
 var autoSearch;
 var results = [];
 var markers = [];
+var currentMarker;
 var placesList = ko.observableArray([]);
 var place = function(data) {
 	this.placeId = ko.observable(data.place_id);
@@ -28,6 +29,12 @@ function initMap() {
 		content: '<h4><a id="location-website" href=""></a></h4><img id="location-image"><br><br><span id="location-vicinity"></span>'
 	});
 
+	google.maps.event.addListener(infoWindow, 'closeclick', function() {
+	   if (currentMarker) {
+			deselectMarker();
+		}
+	});
+
 	placesService = new google.maps.places.PlacesService(map);
 
 	//Add an event listener on the "Auto Redo Search" checkbox, to show/hide the "Redo Search" button
@@ -41,17 +48,23 @@ function initMap() {
 
  	//Add an event listener on the "Redo Search" button to search for places using the new center of the map
  	document.getElementById('redo-search').addEventListener('click', function() {
+ 		if (currentMarker) {
+			deselectMarker();
+		}
  		center = map.getCenter();
  		getPlaces(center);
  	})
 
 	google.maps.event.addListener(map, 'dragend', function() {
-         center = map.getCenter();
-         autoSearch = document.getElementById('auto-redo-search').checked;
-         if (autoSearch) {
-         	getPlaces(center);
-         }
-     });
+		if (currentMarker) {
+			deselectMarker();
+		}
+	   	center = map.getCenter();
+	   	autoSearch = document.getElementById('auto-redo-search').checked;
+	   	if (autoSearch) {
+	   		getPlaces(center);
+        }
+    });
 	getPlaces(center);
 }
 
@@ -120,10 +133,31 @@ function placeMarkers(results) {
 
 		marker.addListener('click', (function(result) {
 			return function() {
-				getPlaceDetails(this, this.placeId);
+				if (!currentMarker) {
+					console.log("1");
+					currentMarker = this;
+					this.setAnimation(google.maps.Animation.BOUNCE);
+					getPlaceDetails(this, this.placeId);
+				}
+				else if (currentMarker && this == currentMarker) {
+					console.log("2");
+				}
+				else if (currentMarker && this != currentMarker) {
+					console.log("3");
+					deselectMarker();
+					currentMarker = this;
+					this.setAnimation(google.maps.Animation.BOUNCE);
+					getPlaceDetails(this, this.placeId);
+				}
 			}
 		})(results[i]))
 	}
+}
+
+//Deselect the current marker
+function deselectMarker() {
+	currentMarker.setAnimation(null);
+	currentMarker = undefined;
 }
 
 //Function to set a map on all markers
