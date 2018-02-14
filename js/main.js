@@ -1,8 +1,17 @@
+//Declare global variables
 var map;
-var markers = [];
-var placesService;
-var infoWindow;
 var center;
+var infoWindow;
+var placesService;
+var places = [];
+var markers = [];
+var markerList = ko.observableArray([]);
+var marker = function(data) {
+	this.position = ko.observable(data.position);
+	this.map = ko.observable(data.map);
+	this.animation = ko.observable(data.animation);
+	this.title = ko.observable(data.title);
+}
 
 //Function to initialize the map
 function initMap() {
@@ -14,6 +23,8 @@ function initMap() {
 	center = map.getCenter();
 
 	infoWindow = new google.maps.InfoWindow();
+
+	placesService = new google.maps.places.PlacesService(map);
 
 	//Add an event listener on the "Auto Redo Search" checkbox, to show/hide the "Redo Search" button
 	document.getElementById('auto-redo-search').addEventListener('change', function() {
@@ -38,16 +49,38 @@ function initMap() {
          }
      });
 
-	placesService = new google.maps.places.PlacesService(map);
-
 	getPlaces(center);
 }
 
+//Function to initialize the List
+function initList(markers) {
+	var ViewModel = function() {
+		var self = this;
+
+		markers.forEach(function(markerItem) {
+			markerList.push(new marker(markerItem));
+		})
+	}
+
+	ko.applyBindings(new ViewModel());
+}
+
+//Initialize the List
+initList(markers);
+
+//Function to update the List
+function updateList(markers) {
+	markerList([]);
+	markers.forEach(function(markerItem) {
+		markerList.push(new marker(markerItem));
+	})
+}
+
 //Function to get places using Nearby Search from Google JavaScript API
-function getPlaces(location) {
+function getPlaces(center) {
 
 	var searchRequest = {
-		location: location,
+		location: center,
 		radius: 2000,
 		type: ['restaurant']
 	}
@@ -60,13 +93,13 @@ function getPlaces(location) {
 		}
 		else {
 			console.log(results);
-			populateList(results);
+			//populateList(results);
 			placeMarkers(results);
 		}
 	}
 
 }
-
+/*
 //Function to populate the list of places
 function populateList(results) {
 	document.getElementById('list-1').innerHTML = '';
@@ -77,7 +110,7 @@ function populateList(results) {
 		document.getElementById('list-1').appendChild(node);
 	}
 }
-
+*/
 //Function to place markers on the map
 function placeMarkers(results) {
 	deleteAllMarkers();
@@ -98,6 +131,7 @@ function placeMarkers(results) {
 			}
 		})(results[i]))
 	}
+	updateList(markers);
 }
 
 //Function to set a map on all markers
@@ -164,26 +198,3 @@ function getPlaceDetails(placeId) {
 	}
 
 }
-
-
-
-/*
-$.ajax({
-	url: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=37.786882,-122.399972&radius=500&key=AIzaSyA7GgGZMQ7P1dbJqvQGARO3N8KpJdjTO1I",
-	method: "GET",
-	dataType: "json",
-	success: function(data) {
-		//$( ".result" ).html( data );
-  if (data) {
-  	console.log("Success");
-  }
-  else {
-  	console.log("Fail");
-  }
-  //alert( "Load was performed." );
-	},
-	error: function() {
-		console.log("Request Failed.")
-	}
-});
-*/
