@@ -3,14 +3,15 @@ var map;
 var center;
 var infoWindow;
 var placesService;
-var places = [];
+var autoSearch;
+var results = [];
 var markers = [];
-var markerList = ko.observableArray([]);
-var marker = function(data) {
-	this.position = ko.observable(data.position);
-	this.map = ko.observable(data.map);
-	this.animation = ko.observable(data.animation);
-	this.title = ko.observable(data.title);
+var placesList = ko.observableArray([]);
+var place = function(data) {
+	this.title = ko.observable(data.name);
+	this.position = ko.observable(data.geometry.location);
+	this.map = ko.observable(map);
+	this.animation = ko.observable(google.maps.Animation.DROP);
 }
 
 //Function to initialize the map
@@ -48,17 +49,16 @@ function initMap() {
          	getPlaces(center);
          }
      });
-
 	getPlaces(center);
 }
 
 //Function to initialize the List
-function initList(markers) {
+function initList(results) {
 	var ViewModel = function() {
 		var self = this;
 
-		markers.forEach(function(markerItem) {
-			markerList.push(new marker(markerItem));
+		results.forEach(function(placeItem) {
+			placesList.push(new place(placeItem));
 		})
 	}
 
@@ -66,13 +66,13 @@ function initList(markers) {
 }
 
 //Initialize the List
-initList(markers);
+initList(results);
 
 //Function to update the List
-function updateList(markers) {
-	markerList([]);
-	markers.forEach(function(markerItem) {
-		markerList.push(new marker(markerItem));
+function updateList(results) {
+	placesList([]);
+	results.forEach(function(placeItem) {
+		placesList.push(new place(placeItem));
 	})
 }
 
@@ -93,26 +93,15 @@ function getPlaces(center) {
 		}
 		else {
 			console.log(results);
-			//populateList(results);
 			placeMarkers(results);
+			updateList(results);
 		}
 	}
+}
 
-}
-/*
-//Function to populate the list of places
-function populateList(results) {
-	document.getElementById('list-1').innerHTML = '';
-	for (i = 0; i < results.length; i++) {
-		var node = document.createElement("li");
-    	var textnode = document.createTextNode(results[i].name);
-    	node.appendChild(textnode);
-		document.getElementById('list-1').appendChild(node);
-	}
-}
-*/
 //Function to place markers on the map
 function placeMarkers(results) {
+	console.log(results);
 	deleteAllMarkers();
 	for (i = 0; i < results.length; i++) {
 
@@ -131,7 +120,6 @@ function placeMarkers(results) {
 			}
 		})(results[i]))
 	}
-	updateList(markers);
 }
 
 //Function to set a map on all markers
