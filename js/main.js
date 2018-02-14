@@ -131,26 +131,26 @@ function placeMarkers(results) {
 
 		markers.push(marker);
 
-		marker.addListener('click', (function(result) {
-			return function() {
-				if (!currentMarker) {
-					console.log("1");
-					currentMarker = this;
-					this.setAnimation(google.maps.Animation.BOUNCE);
-					getPlaceDetails(this, this.placeId);
-				}
-				else if (currentMarker && this == currentMarker) {
-					console.log("2");
-				}
-				else if (currentMarker && this != currentMarker) {
-					console.log("3");
-					deselectMarker();
-					currentMarker = this;
-					this.setAnimation(google.maps.Animation.BOUNCE);
-					getPlaceDetails(this, this.placeId);
-				}
-			}
-		})(results[i]))
+		marker.addListener('click', function() {
+			selectMarker(this);
+		})
+	}
+}
+
+//Select the current marker
+function selectMarker(marker) {
+	if (!currentMarker) {
+		currentMarker = marker;
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+		getPlaceDetails(marker, marker.placeId);
+	}
+	else if (currentMarker && marker == currentMarker) {
+	}
+	else if (currentMarker && marker != currentMarker) {
+		deselectMarker();
+		currentMarker = marker;
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+		getPlaceDetails(marker, marker.placeId);
 	}
 }
 
