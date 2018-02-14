@@ -8,6 +8,7 @@ var results = [];
 var markers = [];
 var placesList = ko.observableArray([]);
 var place = function(data) {
+	this.placeId = ko.observable(data.place_id);
 	this.title = ko.observable(data.name);
 	this.position = ko.observable(data.geometry.location);
 	this.map = ko.observable(map);
@@ -23,7 +24,9 @@ function initMap() {
 
 	center = map.getCenter();
 
-	infoWindow = new google.maps.InfoWindow();
+	infoWindow = new google.maps.InfoWindow({
+		content: '<h4><a id="location-website" href=""></a></h4><img id="location-image"><br><br><span id="location-vicinity"></span>'
+	});
 
 	placesService = new google.maps.places.PlacesService(map);
 
@@ -106,17 +109,18 @@ function placeMarkers(results) {
 	for (i = 0; i < results.length; i++) {
 
 		var marker = new google.maps.Marker({
+			placeId: results[i].place_id,
+			title: results[i].name,
 			position: results[i].geometry.location,
 			map: map,
-			animation: google.maps.Animation.DROP,
-			title: results[i].name
+			animation: google.maps.Animation.DROP
 		})
 
 		markers.push(marker);
 
 		marker.addListener('click', (function(result) {
 			return function() {
-				populateInfoWindow(this, infoWindow, result);
+				getPlaceDetails(this, this.placeId);
 			}
 		})(results[i]))
 	}
@@ -145,26 +149,8 @@ function deleteAllMarkers() {
 	markers = [];
 }
 
-//Function to populate the info window with information
-function populateInfoWindow(marker, infoWindow, result) {
-
-	getPlaceDetails(result.place_id);
-
-	infoWindow.setContent('<h4><a id="location-website" href="' + '">' + marker.title + '</a></h4><img id="location-image"><br><br><span>' + result.vicinity + '</span>');
-	//infoWindow.setContent('<h4>' + marker.title + '</h4><img id="location-image"><br><br><span>' + result.vicinity + '</span>');
-	//infoWindow.setContent(result.vicinity);
-	infoWindow.open(map, marker);
-	if (result.photos) {
-		//document.getElementById('location-image').innerHTML = result.photos[0].html_attributions[0]
-		document.getElementById('location-image').src = result.photos[0].getUrl({'maxWidth': 140, 'maxHeight': 140})
-	} else {
-		document.getElementById('location-image').src = ''
-	}
-	
-}
-
 //Function to get place details from Google Place Details API
-function getPlaceDetails(placeId) {
+function getPlaceDetails(marker, placeId) {
 
 	detailsRequest = {
 		  placeId: placeId
@@ -177,11 +163,27 @@ function getPlaceDetails(placeId) {
 	  	console.log("There is a problem.");
 	  } else {
 	  	console.log(place);
+	  	infoWindow.open(map, marker);
+	  	if (place.name) {
+	  		document.getElementById('location-website').innerHTML = place.name;
+	  	} else {
+	  		document.getElementById('location-website').innerHTML = ''
+	  	}
 	  	if (place.website) {
 	  		document.getElementById('location-website').href = place.website;
 	  	} else {
-	  		document.getElementById('location-website').href = "#"
+	  		document.getElementById('location-website').href = '#'
 	  	}
+	  	if (place.vicinity) {
+	  		document.getElementById('location-vicinity').innerHTML = place.vicinity;
+	  	} else {
+	  		document.getElementById('location-vicinity').innerHTML = ''
+	  	}
+	  	if (place.photos) {
+			document.getElementById('location-image').src = place.photos[0].getUrl({'maxWidth': 140, 'maxHeight': 140})
+		} else {
+			document.getElementById('location-image').src = ''
+		}
 	  }
 	}
 
