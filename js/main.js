@@ -92,6 +92,15 @@ function updateList(results) {
 	})
 }
 
+function selectMarkerFromList(place) {
+	placeId = place.placeId();
+	for (i = 0; i < markers.length; i++) {
+		if (markers[i].placeId == placeId) {
+			selectMarker(markers[i]);
+		}
+	}
+}
+
 //Function to get places using Nearby Search from Google JavaScript API
 function getPlaces(center) {
 
