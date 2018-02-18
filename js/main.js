@@ -9,11 +9,11 @@ var markers = [];
 var currentMarker;
 var placesList = ko.observableArray([]);
 var place = function(data) {
-	this.placeId = ko.observable(data.place_id);
-	this.title = ko.observable(data.name);
-	this.position = ko.observable(data.geometry.location);
-	this.map = ko.observable(map);
-	this.animation = ko.observable(google.maps.Animation.DROP);
+	this.placeId = ko.observable(data.placeId);
+	this.title = ko.observable(data.title);
+	this.position = ko.observable(data.position);
+	this.map = ko.observable(data.map);
+	this.animation = ko.observable(data.animation);
 }
 
 //Function to initialize the map
@@ -36,6 +36,23 @@ function initMap() {
 	});
 
 	placesService = new google.maps.places.PlacesService(map);
+
+	//Add an event listener on the Filter Text Box
+	markerFilter = document.getElementById('marker-filter');
+
+	markerFilter.addEventListener('keyup', function() {
+		var searchTerm = markerFilter.value.toLowerCase();
+		console.log(searchTerm);
+		for (i = 0; i < markers.length; i++) {
+			if (!markers[i].title.toLowerCase().includes(searchTerm)) {
+				markers[i].setMap(null);
+			}
+			else {
+				markers[i].setMap(map);
+			}
+		}
+		updateList();
+	})
 
 	//Add an event listener on the "Auto Redo Search" checkbox, to show/hide the "Redo Search" button
 	document.getElementById('auto-redo-search').addEventListener('change', function() {
@@ -85,10 +102,15 @@ function initList(results) {
 initList(results);
 
 //Function to update the List
-function updateList(results) {
+function updateList() {
 	placesList([]);
-	results.forEach(function(placeItem) {
-		placesList.push(new place(placeItem));
+	markers.forEach(function(placeItem) {
+		if (placeItem.map) {
+			placesList.push(new place(placeItem));
+		}
+		else {
+
+		}
 	})
 }
 
@@ -119,7 +141,6 @@ function getPlaces(center) {
 		else {
 			console.log(results);
 			placeMarkers(results);
-			updateList(results);
 		}
 	}
 }
@@ -144,6 +165,7 @@ function placeMarkers(results) {
 			selectMarker(this);
 		})
 	}
+	updateList();
 }
 
 //Select the current marker

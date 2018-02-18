@@ -14,3 +14,19 @@ html, body {
 	height: 100%;
 	width: 70%;
 }
+
+#marker-filter {
+	width: 100%;
+}
+
+#marker-list {
+	list-style-type: none;
+}
+
+.marker-list-item {
+	
+}
+
+h3 {
+	text-align: center;
+}

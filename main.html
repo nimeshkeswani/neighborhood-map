@@ -4,11 +4,13 @@
 	</head>
 	<body>
 		<div id="location-list">
-			<ul id="marker-list" data-bind="foreach: placesList">
-		        <li data-bind="text: title, click: selectMarkerFromList;"></li>
-		    </ul>
+			<h3>Restaurants</h3>
 			<input type="checkbox" id="auto-redo-search" checked>Auto Redo Search</button>
 			<button id="redo-search" hidden>Redo Search</button>
+			<input id="marker-filter" type="textbox" placeholder="Filter">
+			<ul id="marker-list" data-bind="foreach: placesList">
+		        <li class="marker-list-item" data-bind="text: title, click: selectMarkerFromList;"></li>
+		    </ul>
 		</div>
 		<div id="map"></div>
 	</body>
