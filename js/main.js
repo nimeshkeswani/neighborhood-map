@@ -258,8 +258,10 @@ function getPlaceDetails(marker, placeId) {
 		}
 		else {
 			console.log(data['response']['venue']);
-			detailsCallback(data['response']['venue']);
-	    	}
+			if (data['response']['venue']) {
+				detailsCallback(data['response']['venue']);
+			}
+	    }
 	}
 	});
 
