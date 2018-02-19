@@ -7,7 +7,7 @@
 	<body>
 		<div id="location-list">
 			<div id="location-list-header">
-				<h3>Restaurants</h3>
+				<h3>Asian Restaurants by <img src="static/images/foursquare.png"/></h3>
 				<div id="location-list-search">
 					<input type="checkbox" id="auto-redo-search" checked>Auto Redo Search</button>
 					<button id="redo-search" hidden>Redo Search</button>
@@ -15,10 +15,10 @@
 				<input id="marker-filter" type="textbox" placeholder="Filter Results...">
 			</div>
 			<div id="location-list-content">
-			<ul id="marker-list" data-bind="foreach: placesList">
-		        <li class="marker-list-item" data-bind="text: title, click: selectMarkerFromList;"></li>
-		    </ul>
-		    <h4 id="no-places-found" hidden>No Places found</h4>
+				<ul id="marker-list" data-bind="foreach: placesList">
+			        <li class="marker-list-item" data-bind="text: title, click: selectMarkerFromList;"></li>
+			    </ul>
+			    <h4 id="no-places-found" hidden>No Places found</h4>
 			</div>
 		</div>
 		<div id="map"></div>

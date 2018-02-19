@@ -27,7 +27,7 @@ function initMap() {
 	center = map.getCenter();
 
 	infoWindow = new google.maps.InfoWindow({
-		content: '<h4><a id="location-website" href=""></a></h4><img id="location-image"><br><br><span id="location-vicinity"></span>'
+		content: '<h4><a id="location-website" href=""></a></h4><img id="location-image"><br><br><span id="location-vicinity"></span><br><br>Powered by: <img src="static/images/foursquare.png" style="height: 20;">'
 	});
 
 	google.maps.event.addListener(infoWindow, 'closeclick', function() {
@@ -142,7 +142,7 @@ function getPlaces(center) {
 		ll: center.lat() + ',' + center.lng(),
 		client_id: 'EN0J2UJWRF5IOMFDU2WGQNUZFL05ATTXEK3RNRWX3S4FRGFS',
 		client_secret: 'DLHKVY21IFFTPTBJVOEXA1KPFVMDU4N1BBPLYLWZJSCDMFGZ',
-		categoryId: '4bf58dd8d48988d10f941735',
+		categoryId: '4bf58dd8d48988d142941735',
 		v: '20180210'
 	}
 
@@ -168,6 +168,8 @@ function getPlaces(center) {
 			}
 	    }
 	}
+	}).fail( function () {
+		console.log("Something went Wrong.")
 	});
 }
 
@@ -263,6 +265,8 @@ function getPlaceDetails(marker, placeId) {
 			}
 	    }
 	}
+	}).fail( function () {
+		console.log("Something went Wrong.")
 	});
 
 	function detailsCallback(place) {

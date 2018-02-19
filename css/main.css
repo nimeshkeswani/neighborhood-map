@@ -90,6 +90,10 @@ h3 {
     border: 1px solid black;
 }
 
+h3 img {
+	height: 20;
+}
+
 h4 {
 	color: darkred;
 	text-align: center;
