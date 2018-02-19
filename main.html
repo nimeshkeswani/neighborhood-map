@@ -1,16 +1,24 @@
 <html>
 	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 	<body>
 		<div id="location-list">
-			<h3>Restaurants</h3>
-			<input type="checkbox" id="auto-redo-search" checked>Auto Redo Search</button>
-			<button id="redo-search" hidden>Redo Search</button>
-			<input id="marker-filter" type="textbox" placeholder="Filter">
+			<div id="location-list-header">
+				<h3>Restaurants</h3>
+				<div id="location-list-search">
+					<input type="checkbox" id="auto-redo-search" checked>Auto Redo Search</button>
+					<button id="redo-search" hidden>Redo Search</button>
+				</div>
+				<input id="marker-filter" type="textbox" placeholder="Filter">
+			</div>
+			<div id="location-list-content">
 			<ul id="marker-list" data-bind="foreach: placesList">
 		        <li class="marker-list-item" data-bind="text: title, click: selectMarkerFromList;"></li>
 		    </ul>
+			</div>
 		</div>
 		<div id="map"></div>
 	</body>
