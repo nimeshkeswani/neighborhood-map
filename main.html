@@ -12,12 +12,13 @@
 					<input type="checkbox" id="auto-redo-search" checked>Auto Redo Search</button>
 					<button id="redo-search" hidden>Redo Search</button>
 				</div>
-				<input id="marker-filter" type="textbox" placeholder="Filter">
+				<input id="marker-filter" type="textbox" placeholder="Filter Results...">
 			</div>
 			<div id="location-list-content">
 			<ul id="marker-list" data-bind="foreach: placesList">
 		        <li class="marker-list-item" data-bind="text: title, click: selectMarkerFromList;"></li>
 		    </ul>
+		    <h2 id="no-places-found" hidden>No Places found</h2>
 			</div>
 		</div>
 		<div id="map"></div>

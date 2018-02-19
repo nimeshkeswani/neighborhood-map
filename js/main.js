@@ -58,6 +58,7 @@ function initMap() {
 			deselectMarker();
 		}
  		center = map.getCenter();
+ 		markerFilter.value = '';
  		getPlaces(center);
  	})
 
@@ -68,6 +69,7 @@ function initMap() {
 	   	center = map.getCenter();
 	   	autoSearch = document.getElementById('auto-redo-search').checked;
 	   	if (autoSearch) {
+	   		markerFilter.value = '';
 	   		getPlaces(center);
         }
     });
@@ -155,12 +157,14 @@ function getPlaces(center) {
 		else {
 			console.log(data['response']['venues']);
 			if (data['response']['venues'][0]) {
+				document.getElementById('no-places-found').hidden = true;
 				placeMarkers(data['response']['venues']);
 			}
 			else {
 				console.log("No places found.");
 				deleteAllMarkers();
 				updateList();
+				document.getElementById('no-places-found').hidden = false;
 			}
 	    }
 	}
@@ -276,7 +280,7 @@ function getPlaceDetails(marker, placeId) {
 	  	} else {
 	  		document.getElementById('location-vicinity').innerHTML = ''
 	  	}
-	  	if (place.photos) {
+	  	if (place.photos.groups[0]) {
 			document.getElementById('location-image').src = place.photos.groups[0].items[0].prefix + '200x200' + place.photos.groups[0].items[0].suffix
 		} else {
 			document.getElementById('location-image').src = ''
