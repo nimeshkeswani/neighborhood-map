@@ -20,7 +20,7 @@ var place = function(data) {
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 37.570750, lng: -122.337088},
-		zoom: 15
+		zoom: 10
 	});
 
 	center = map.getCenter();
@@ -134,22 +134,28 @@ function selectMarkerFromList(place) {
 function getPlaces(center) {
 
 	var searchRequest = {
-		location: center,
-		radius: 2000,
-		type: ['restaurant']
+		ll: center.lat() + ',' + center.lng(),
+		client_id: 'EN0J2UJWRF5IOMFDU2WGQNUZFL05ATTXEK3RNRWX3S4FRGFS',
+		client_secret: 'DLHKVY21IFFTPTBJVOEXA1KPFVMDU4N1BBPLYLWZJSCDMFGZ',
+		categoryId: '4bf58dd8d48988d10f941735',
+		v: '20180210'
 	}
 
-	placesService.nearbySearch(searchRequest, searchCallback);
-
-	function searchCallback(results, status) {
-		if (status != google.maps.places.PlacesServiceStatus.OK) {
+	$.ajax({
+	    type: 'GET',
+	    url: 'https://api.foursquare.com/v2/venues/search',
+	    data: searchRequest,
+	    success: function(data) {
+	    	if (data['meta']['code'] != '200') {
 			console.log("There is a problem.");
 		}
 		else {
-			console.log(results);
-			placeMarkers(results);
-		}
+			console.log(data['response']['venues']);
+			placeMarkers(data['response']['venues']);
+
+	    	}
 	}
+	});
 }
 
 //Function to place markers on the map
@@ -159,9 +165,9 @@ function placeMarkers(results) {
 	for (i = 0; i < results.length; i++) {
 
 		var marker = new google.maps.Marker({
-			placeId: results[i].place_id,
+			placeId: results[i].id,
 			title: results[i].name,
-			position: results[i].geometry.location,
+			position: {'lat': results[i].location.lat, "lng": results[i].location.lng},
 			map: map,
 			animation: google.maps.Animation.DROP
 		})
@@ -224,39 +230,48 @@ function deleteAllMarkers() {
 //Function to get place details from Google Place Details API
 function getPlaceDetails(marker, placeId) {
 
-	detailsRequest = {
-		  placeId: placeId
-	};
+	var searchRequest = {
+		client_id: 'EN0J2UJWRF5IOMFDU2WGQNUZFL05ATTXEK3RNRWX3S4FRGFS',
+		client_secret: 'DLHKVY21IFFTPTBJVOEXA1KPFVMDU4N1BBPLYLWZJSCDMFGZ',
+		v: '20180210'
+	}
 
-	placesService.getDetails(detailsRequest, detailsCallback);
+	$.ajax({
+	    type: 'GET',
+	    url: 'https://api.foursquare.com/v2/venues/' + placeId,
+	    data: searchRequest,
+	    success: function(data) {
+	    	if (data['meta']['code'] != '200') {
+			console.log("There is a problem.");
+		}
+		else {
+			console.log(data['response']['venue']);
+			detailsCallback(data['response']['venue']);
+	    	}
+	}
+	});
 
-	function detailsCallback(place, status) {
-	  if (status != google.maps.places.PlacesServiceStatus.OK) {
-	  	console.log("There is a problem.");
-	  } else {
-	  	console.log(place);
-	  	infoWindow.open(map, marker);
+	function detailsCallback(place) {
+		infoWindow.open(map, marker);
 	  	if (place.name) {
 	  		document.getElementById('location-website').innerHTML = place.name;
 	  	} else {
 	  		document.getElementById('location-website').innerHTML = ''
 	  	}
-	  	if (place.website) {
-	  		document.getElementById('location-website').href = place.website;
+	  	if (place.url) {
+	  		document.getElementById('location-website').href = place.url;
 	  	} else {
 	  		document.getElementById('location-website').href = '#'
 	  	}
-	  	if (place.vicinity) {
-	  		document.getElementById('location-vicinity').innerHTML = place.vicinity;
+	  	if (place.location) {
+	  		document.getElementById('location-vicinity').innerHTML = place.location.address + ' ' + place.location.city + ' ' + place.location.country;
 	  	} else {
 	  		document.getElementById('location-vicinity').innerHTML = ''
 	  	}
 	  	if (place.photos) {
-			document.getElementById('location-image').src = place.photos[0].getUrl({'maxWidth': 140, 'maxHeight': 140})
+			document.getElementById('location-image').src = place.photos.groups[0].items[0].prefix + '200x200' + place.photos.groups[0].items[0].suffix
 		} else {
 			document.getElementById('location-image').src = ''
 		}
-	  }
 	}
-
 }
