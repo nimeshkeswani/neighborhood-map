@@ -7,6 +7,7 @@ var autoSearch;
 var results = [];
 var markers = [];
 var currentMarker;
+var markerFilter = document.getElementById('marker-filter');
 var placesList = ko.observableArray([]);
 var place = function(data) {
 	this.placeId = ko.observable(data.placeId);
@@ -38,27 +39,8 @@ function initMap() {
 	placesService = new google.maps.places.PlacesService(map);
 
 	//Add an event listener on the Filter Text Box
-	markerFilter = document.getElementById('marker-filter');
-
 	markerFilter.addEventListener('keyup', function() {
-		var searchTerm = markerFilter.value.toLowerCase();
-		console.log(searchTerm);
-		for (i = 0; i < markers.length; i++) {
-			if (!markers[i].title.toLowerCase().includes(searchTerm)) {
-				if (currentMarker && currentMarker.placeId == markers[i].placeId) {
-					infoWindow.close();
-					deselectMarker();
-				}
-				markers[i].setMap(null);
-			}
-			else {
-				if (!markers[i].map) {
-					markers[i].setMap(map);
-					markers[i].setAnimation(google.maps.Animation.DROP);
-				}
-			}
-		}
-		updateList();
+		filterMarkers()
 	})
 
 	//Add an event listener on the "Auto Redo Search" checkbox, to show/hide the "Redo Search" button
@@ -121,6 +103,27 @@ function updateList() {
 	})
 }
 
+//Function to Filter Markers using Search Term
+function filterMarkers() {
+	var searchTerm = markerFilter.value.toLowerCase();
+	for (i = 0; i < markers.length; i++) {
+		if (!markers[i].title.toLowerCase().includes(searchTerm)) {
+			if (currentMarker && currentMarker.placeId == markers[i].placeId) {
+				infoWindow.close();
+				deselectMarker();
+			}
+			markers[i].setMap(null);
+		}
+		else {
+			if (!markers[i].map) {
+				markers[i].setMap(map);
+				markers[i].setAnimation(google.maps.Animation.DROP);
+			}
+		}
+	}
+	updateList();
+}
+
 function selectMarkerFromList(place) {
 	placeId = place.placeId();
 	for (i = 0; i < markers.length; i++) {
@@ -151,16 +154,21 @@ function getPlaces(center) {
 		}
 		else {
 			console.log(data['response']['venues']);
-			placeMarkers(data['response']['venues']);
-
-	    	}
+			if (data['response']['venues'][0]) {
+				placeMarkers(data['response']['venues']);
+			}
+			else {
+				console.log("No places found.");
+				deleteAllMarkers();
+				updateList();
+			}
+	    }
 	}
 	});
 }
 
 //Function to place markers on the map
 function placeMarkers(results) {
-	console.log(results);
 	deleteAllMarkers();
 	for (i = 0; i < results.length; i++) {
 
