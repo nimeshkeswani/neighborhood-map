@@ -45,10 +45,17 @@ function initMap() {
 		console.log(searchTerm);
 		for (i = 0; i < markers.length; i++) {
 			if (!markers[i].title.toLowerCase().includes(searchTerm)) {
+				if (currentMarker && currentMarker.placeId == markers[i].placeId) {
+					infoWindow.close();
+					deselectMarker();
+				}
 				markers[i].setMap(null);
 			}
 			else {
-				markers[i].setMap(map);
+				if (!markers[i].map) {
+					markers[i].setMap(map);
+					markers[i].setAnimation(google.maps.Animation.DROP);
+				}
 			}
 		}
 		updateList();
