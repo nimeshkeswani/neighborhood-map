@@ -1,0 +1,20 @@
+{
+  "name": "neighborhood-map",
+  "homepage": "https://github.com/nimeshkeswani/udacity-neighborhood-map",
+  "authors": [
+    "Nimesh Keswani <nimeshkeswani@hotmail.com>"
+  ],
+  "description": "Udacity Neighborhood Map Project",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "knockout": "^3.4.2"
+  }
+}
