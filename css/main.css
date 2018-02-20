@@ -7,7 +7,7 @@
 @media only screen and (max-width: 450px) {
 
    body { 
-      font-size: 0.7em; 
+      font-size: 0.7em;
    }
 
    #hamburger-nav {
@@ -40,7 +40,7 @@
 @media only screen and (min-width: 451px) {
 
    body { 
-      font-size: 1.0em; 
+      font-size: 1.0em;
    }
 
    #hamburger-nav {
@@ -188,7 +188,7 @@ html, body {
 }
 
 #no-places-found {
-	color: darkred;
+	color: #E8453C;
 	text-align: center;
 	padding: 5px;
 	list-style-position:inside;
