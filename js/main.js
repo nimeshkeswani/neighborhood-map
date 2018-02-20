@@ -26,7 +26,7 @@ function initMap() {
 	center = map.getCenter();
 
 	infoWindow = new google.maps.InfoWindow({
-		content: '<h4><a id="location-website" href=""></a></h4><img id="location-image"><br><br><span id="location-vicinity"></span><br><br>Powered by: <img src="static/images/foursquare.png" style="height: 20;">'
+		content: '<h4><a id="location-website" href=""></a></h4><img id="location-image"><br><br><span id="location-vicinity"></span><br><br>Powered by: <img src="static/images/foursquare.png" style="height: 20px;">'
 	});
 
 	google.maps.event.addListener(infoWindow, 'closeclick', function() {
