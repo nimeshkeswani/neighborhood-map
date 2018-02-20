@@ -145,7 +145,7 @@ function getPlaces(center) {
         url: "https://api.foursquare.com/v2/venues/search",
         data: searchRequest,
         success: function(data) {
-            if (data.meta.code !== "200") {
+            if (data.meta.code !== 200) {
             console.log("There is a problem.");
         }
         else {
@@ -246,7 +246,7 @@ function getPlaceDetails(marker, placeId) {
         url: "https://api.foursquare.com/v2/venues/" + placeId,
         data: searchRequest,
         success: function(data) {
-            if (data.meta.code !== "200") {
+            if (data.meta.code !== 200) {
             console.log("There is a problem.");
         }
         else {
