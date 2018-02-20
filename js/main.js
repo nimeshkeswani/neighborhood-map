@@ -104,7 +104,7 @@ function filterMarkers() {
     var searchTerm = markerFilter.value.toLowerCase();
     markers.forEach( function (marker) {
         if (!marker.title.toLowerCase().includes(searchTerm)) {
-            if (currentMarker && currentMarker.placeId == marker.placeId) {
+            if (currentMarker && currentMarker.placeId === marker.placeId) {
                 infoWindow.close();
                 deselectMarker();
             }
@@ -123,10 +123,10 @@ function filterMarkers() {
 function selectMarkerFromList(place) {
     placeId = place.placeId();
     markers.forEach( function (marker) {
-        if (marker.placeId == placeId) {
+        if (marker.placeId === placeId) {
             selectMarker(marker);
         }
-    })
+    });
 }
 
 //Function to get places using Nearby Search from Google JavaScript API
@@ -145,7 +145,7 @@ function getPlaces(center) {
         url: "https://api.foursquare.com/v2/venues/search",
         data: searchRequest,
         success: function(data) {
-            if (data.meta.code != "200") {
+            if (data.meta.code !== "200") {
             console.log("There is a problem.");
         }
         else {
@@ -195,7 +195,7 @@ function selectMarker(marker) {
         marker.setAnimation(google.maps.Animation.BOUNCE);
         getPlaceDetails(marker, marker.placeId);
     }
-    else if (currentMarker && marker != currentMarker) {
+    else if (currentMarker && marker !== currentMarker) {
         deselectMarker();
         currentMarker = marker;
         marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -213,7 +213,7 @@ function deselectMarker() {
 function setMapOnAllMarkers(map) {
     markers.forEach(function (marker) {
         marker.setMap(map);
-    })
+    });
 }
 
 //Function to hide all the markers on the map
@@ -246,18 +246,18 @@ function getPlaceDetails(marker, placeId) {
         url: "https://api.foursquare.com/v2/venues/" + placeId,
         data: searchRequest,
         success: function(data) {
-            if (data.meta.code != "200") {
+            if (data.meta.code !== "200") {
             console.log("There is a problem.");
         }
         else {
             console.log(data.response.venue);
             if (data.response.venue) {
-                detailsCallback(data["response"]["venue"]);
+                detailsCallback(data.response.venue);
             }
         }
     }
     }).fail( function () {
-        console.log("Something went Wrong.")
+        console.log("Something went Wrong.");
     });
 
     function detailsCallback(place) {
@@ -265,22 +265,22 @@ function getPlaceDetails(marker, placeId) {
           if (place.name) {
               document.getElementById("location-website").innerHTML = place.name;
           } else {
-              document.getElementById("location-website").innerHTML = ""
+              document.getElementById("location-website").innerHTML = "";
           }
           if (place.url) {
               document.getElementById("location-website").href = place.url;
           } else {
-              document.getElementById("location-website").href = "#"
+              document.getElementById("location-website").href = "#";
           }
           if (place.location) {
               document.getElementById("location-vicinity").innerHTML = place.location.address + " " + place.location.city + " " + place.location.country;
           } else {
-              document.getElementById("location-vicinity").innerHTML = ""
+              document.getElementById("location-vicinity").innerHTML = "";
           }
           if (place.photos.groups[0]) {
-            document.getElementById("location-image").src = place.photos.groups[0].items[0].prefix + "200x200" + place.photos.groups[0].items[0].suffix
+            document.getElementById("location-image").src = place.photos.groups[0].items[0].prefix + "200x200" + place.photos.groups[0].items[0].suffix;
         } else {
-            document.getElementById("location-image").src = ""
+            document.getElementById("location-image").src = "";
         }
     }
 }
