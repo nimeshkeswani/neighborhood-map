@@ -7,7 +7,7 @@ var autoSearch;
 var results = [];
 var markers = [];
 var currentMarker;
-var markerFilter = document.getElementById('marker-filter');
+var markerFilter = document.getElementById('location-list-filter');
 var placesList = ko.observableArray([]);
 var place = function(data) {
 	this.placeId = ko.observable(data.placeId);
@@ -44,7 +44,7 @@ function initMap() {
 	})
 
 	//Add an event listener on the "Auto Redo Search" checkbox, to show/hide the "Redo Search" button
-	document.getElementById('auto-redo-search').addEventListener('change', function() {
+	document.getElementById('auto-search').addEventListener('change', function() {
  		if (this.checked) {
  			document.getElementById('redo-search').hidden = true;
  		} else {
@@ -67,7 +67,7 @@ function initMap() {
 			deselectMarker();
 		}
 	   	center = map.getCenter();
-	   	autoSearch = document.getElementById('auto-redo-search').checked;
+	   	autoSearch = document.getElementById('auto-search').checked;
 	   	if (autoSearch) {
 	   		markerFilter.value = '';
 	   		getPlaces(center);

@@ -5,23 +5,27 @@
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 	<body>
-		<div id="location-list">
-			<div id="location-list-header">
-				<h3>Asian Restaurants by <img src="static/images/foursquare.png"/></h3>
-				<div id="location-list-search">
-					<input type="checkbox" id="auto-redo-search" checked>Auto Redo Search</button>
-					<button id="redo-search" hidden>Redo Search</button>
-				</div>
-				<input id="marker-filter" type="textbox" placeholder="Filter Results...">
-			</div>
-			<div id="location-list-content">
-				<ul id="marker-list" data-bind="foreach: placesList">
-			        <li class="marker-list-item" data-bind="text: title, click: selectMarkerFromList;"></li>
-			    </ul>
-			    <h4 id="no-places-found" hidden>No Places found</h4>
-			</div>
+		<div id="title">
+			<h3>Asian Restaurants by <img src="static/images/foursquare.png"/></h3>
 		</div>
-		<div id="map"></div>
+		<div id="content">
+			<div id="location-list">
+				<div id="location-list-header">
+						<div id="location-list-search">
+							<input id="auto-search" type="checkbox" checked>Auto Search</button>
+							<button id="redo-search" hidden>Redo Search</button>
+						</div>
+						<input id="location-list-filter" type="textbox" placeholder="Filter Results...">
+				</div>
+				<div id="location-list-content">
+					<ul id="marker-list" data-bind="foreach: placesList">
+				        <li class="marker-list-item" data-bind="text: title, click: selectMarkerFromList;"></li>
+				    </ul>
+				    <h4 id="no-places-found" hidden>No Places found</h4>
+				</div>
+			</div>
+			<div id="map"></div>
+		<div>
 	</body>
 	<script src="js/jquery-3.3.1.min.js"></script>
 	<script src="bower_components/knockout/dist/knockout.js"></script>

@@ -22,82 +22,122 @@
 }
 
 html, body {
+	display: block;
 	height: 100%;
+	width: 100%;
 	margin: 0;
 	padding: 0;
-	background-color: gray;
+}
+
+#title {
+	display: block;
+	position: static;
+	height: 40px;
+	width: 100%;
+	min-width: 240px;	
+	text-align: center;
+	padding: 5px;
+	list-style-position:inside;
+	border: 1px solid black;
+}
+
+#title img {
+	height: 20;
+}
+
+#title h3 {
+	margin: 0;
+}
+
+#content {
+	display: flex;
+	position: static;
+	height: 95%;
+	width: 100%;
+	text-align: center;
+	margin: 0;
+	list-style-position:inside;
+	border: 1px solid black;
 }
 
 #location-list {
+	display: inline;
+	position: static;
 	height: 100%;
-	width: 30%;
+	width: 20%;
+	min-width: 240px;
 	float: left;
 }
 
-#location-list-header {
-	height: 20%;
+#map {
+	display: inline;
+	position: static;
+	float: right;
+	height: 100%;
+	width: 80%;
+}
+
+#location-list-header {	
+	display: block;
+	position: static;
+	height: 120px;
 	width: 100%;
 	overflow: scroll;
-	padding-top: 2px;
-	padding-bottom: 2px;
+	border: 1px solid black;
 }
 
 #location-list-content {
-	height: 80%;
+	display: block;
+	position: static;
+	height: calc( 100% - 120px );
 	width: 100%;
 	overflow: scroll;
-	padding-top: 2px;
-	padding-bottom: 2px;
-}
-
-#map {
-	height: 100%;
-	width: 70%;
+	border: 1px solid black;
 }
 
 #location-list-search {
+	display: flex;
+	align-items: center;
+	height: 50%;
 	padding: 5px;
-	margin: 5px;
-	list-style-position:inside;
-    border: 1px solid black;
+	width: 100%;
+	border: 1px solid black;
 }
 
-#marker-filter {
+#location-list-filter {
+	height: 50%;
+	padding: 5px;
 	font-size: 1.0em;
 	width: 100%;
-	height: 30%;
+	border: 1px solid black;
+}
+
+#auto-search {
+}
+
+#redo-search {
 }
 
 #marker-list {
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
+	width: 100%;
 }
 
 .marker-list-item {
-	height: 5%;
+	display: block;
+	height: 10%;
+	min-height: 50px;
 	padding: 5px;
-	margin: 5px;
 	list-style-position:inside;
     border: 1px solid black;
+    width: 100%;
 }
 
-h3 {
-	text-align: center;
-	padding: 5px;
-	margin: 5px;
-	list-style-position:inside;
-    border: 1px solid black;
-}
-
-h3 img {
-	height: 20;
-}
-
-h4 {
+#no-places-found {
 	color: darkred;
 	text-align: center;
 	padding: 5px;
-	margin: 5px;
 	list-style-position:inside;
 }
