@@ -25,15 +25,13 @@
 	#hamburger-nav:hover ~ #location-list {
 		display: inline;
 		position: static;
-		z-index: 1
-		background-color: pink;
+		z-index: 1;
 	}
 
 	#location-list:hover {
 		display: inline;
 		position: static;
-		z-index: 1
-		background-color: pink;
+		z-index: 1;
 	}
 
 }

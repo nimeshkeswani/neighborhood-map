@@ -2,7 +2,6 @@
 var map;
 var center;
 var infoWindow;
-var placesService;
 var autoSearch;
 var results = [];
 var markers = [];
@@ -35,8 +34,6 @@ function initMap() {
 			deselectMarker();
 		}
 	});
-
-	placesService = new google.maps.places.PlacesService(map);
 
 	//Add an event listener on the Filter Text Box
 	markerFilter.addEventListener('keyup', function() {

@@ -1,24 +1,31 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Neighborhood Map</title>
 		<link rel="stylesheet" type="text/css" href="css/main.css">
+		<script src="js/jquery-3.3.1.min.js"></script>
+		<script src="bower_components/knockout/dist/knockout.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+		<script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyA7GgGZMQ7P1dbJqvQGARO3N8KpJdjTO1I&callback=initMap">
+		</script>
 	</head>
 	<body>
 		<div id="title">
-			<h3>Asian Restaurants by <img src="static/images/foursquare.png"/></h3>
+			<h3>Asian Restaurants by <img src="static/images/foursquare.png" alt="Foursquare"/></h3>
 		</div>
 		<div id="content">
 			<div id="hamburger-nav">
-				<img src="static/images/navigation-icon.png" id="menu-icon"/>
+				<img src="static/images/navigation-icon.png" id="menu-icon" alt="Menu"/>
 			</div>
 			<div id="location-list">
 				<div id="location-list-header">
 						<div id="location-list-search">
-							<input id="auto-search" type="checkbox" checked>Auto Search</button>
+							<input id="auto-search" type="checkbox" checked><label>Auto Search</label>
 							<button id="redo-search" hidden>Redo Search</button>
 						</div>
-						<input id="location-list-filter" type="textbox" placeholder="Filter Results...">
+						<input id="location-list-filter" type="text" placeholder="Filter Results...">
 				</div>
 				<div id="location-list-content">
 					<ul id="marker-list" data-bind="foreach: placesList">
@@ -28,11 +35,6 @@
 				</div>
 			</div>
 			<div id="map"></div>
-		<div>
+		</div>
 	</body>
-	<script src="js/jquery-3.3.1.min.js"></script>
-	<script src="bower_components/knockout/dist/knockout.js"></script>
-	<script type="text/javascript" src="js/main.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyA7GgGZMQ7P1dbJqvQGARO3N8KpJdjTO1I&callback=initMap">
-	</script>
 </html>
