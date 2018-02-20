@@ -102,31 +102,31 @@ function updateList() {
 //Function to Filter Markers using Search Term
 function filterMarkers() {
     var searchTerm = markerFilter.value.toLowerCase();
-    for (i = 0; i < markers.length; i+=1) {
-        if (!markers[i].title.toLowerCase().includes(searchTerm)) {
-            if (currentMarker && currentMarker.placeId == markers[i].placeId) {
+    markers.forEach( function (marker) {
+        if (!marker.title.toLowerCase().includes(searchTerm)) {
+            if (currentMarker && currentMarker.placeId == marker.placeId) {
                 infoWindow.close();
                 deselectMarker();
             }
-            markers[i].setMap(null);
+            marker.setMap(null);
         }
         else {
-            if (!markers[i].map) {
-                markers[i].setMap(map);
-                markers[i].setAnimation(google.maps.Animation.DROP);
+            if (!marker.map) {
+                marker.setMap(map);
+                marker.setAnimation(google.maps.Animation.DROP);
             }
         }
-    }
+    });
     updateList();
 }
 
 function selectMarkerFromList(place) {
     placeId = place.placeId();
-    for (i = 0; i < markers.length; i+=1) {
-        if (markers[i].placeId == placeId) {
-            selectMarker(markers[i]);
+    markers.forEach( function (marker) {
+        if (marker.placeId == placeId) {
+            selectMarker(marker);
         }
-    }
+    })
 }
 
 //Function to get places using Nearby Search from Google JavaScript API
@@ -170,12 +170,11 @@ function getPlaces(center) {
 //Function to place markers on the map
 function placeMarkers(results) {
     deleteAllMarkers();
-    for (i = 0; i < results.length; i+=1) {
-
+    results.forEach( function(result) {
         var marker = new google.maps.Marker({
-            placeId: results[i].id,
-            title: results[i].name,
-            position: {"lat": results[i].location.lat, "lng": results[i].location.lng},
+            placeId: result.id,
+            title: result.name,
+            position: {"lat": result.location.lat, "lng": result.location.lng},
             map: map,
             animation: google.maps.Animation.DROP
         });
@@ -185,7 +184,7 @@ function placeMarkers(results) {
         marker.addListener("click", function() {
             selectMarker(this);
         });
-    }
+    });
     updateList();
 }
 
@@ -212,9 +211,9 @@ function deselectMarker() {
 
 //Function to set a map on all markers
 function setMapOnAllMarkers(map) {
-    for (i = 0; i < markers.length; i+=1) {
-      markers[i].setMap(map);
-    }
+    markers.forEach(function (marker) {
+        marker.setMap(map);
+    })
 }
 
 //Function to hide all the markers on the map
