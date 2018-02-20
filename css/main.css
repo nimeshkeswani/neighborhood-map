@@ -10,14 +10,53 @@
       font-size: 0.7em; 
    }
 
+   #hamburger-nav {
+   	visibility: visible;
+   }
+
+   #location-list {
+		display: none;
+	}
+
+   #map {
+		width: 100%;
+	}
+
+	#hamburger-nav:hover ~ #location-list {
+		display: inline;
+		position: static;
+		z-index: 1
+		background-color: pink;
+	}
+
+	#location-list:hover {
+		display: inline;
+		position: static;
+		z-index: 1
+		background-color: pink;
+	}
+
 }
 
 /* font size for larger screens */
-@media only screen and (min-width: 640px) {
+@media only screen and (min-width: 451px) {
 
    body { 
       font-size: 1.0em; 
    }
+
+   #hamburger-nav {
+   	visibility: hidden;
+   }
+
+   #location-list { 
+		display: inline;
+		position: static;
+	}
+
+	#map {
+		width: 80%;
+	}
 
 }
 
@@ -49,6 +88,18 @@ html, body {
 	margin: 0;
 }
 
+#hamburger-nav {
+	display: block;
+	position: fixed;
+	z-index: 1;
+	background-color: white;
+   	float: left;
+   }
+
+#hamburger-nav img {
+	height: 12px;
+   }
+
 #content {
 	display: flex;
 	position: static;
@@ -61,8 +112,6 @@ html, body {
 }
 
 #location-list {
-	display: inline;
-	position: static;
 	height: 100%;
 	width: 20%;
 	min-width: 240px;
@@ -74,7 +123,6 @@ html, body {
 	position: static;
 	float: right;
 	height: 100%;
-	width: 80%;
 }
 
 #location-list-header {	
