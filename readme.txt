@@ -14,4 +14,6 @@ Steps to run this application:
 
 1. Clone or Download this Repository on your local computer
 2. Go to the project directory
-3. Open the main.html file in your browser.
+3. Install bower by running the command "npm install -g bower" in your Terminal, if you don't already have it installed.
+4. Install KnockoutJS by running the command  "bower install knockout" in your Terminal.
+5. Open the main.html file in your browser.
