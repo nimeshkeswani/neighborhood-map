@@ -15,7 +15,7 @@ var place = function(data) {
 
 //Function when map fails to load
 function errorMap(e) {
-    document.getElementById('map').innerHTML = "Couldn't loap the Map. Something went wrong.";
+    document.getElementById("map").innerHTML = "Couldn't loap the Map. Something went wrong.";
 }
 
 //Function to initialize the map
@@ -41,7 +41,7 @@ function initMap() {
         }
            center = map.getCenter();
            if (myViewModel.autoSearch()) {
-               myViewModel.markerFilter('');
+               myViewModel.markerFilter("");
                getPlaces(center);
         }
     });
@@ -65,14 +65,14 @@ var ViewModel = function() {
             deselectMarker();
         }
         center = map.getCenter();
-        myViewModel.markerFilter('');;
+        myViewModel.markerFilter("");
         getPlaces(center);
-    }
+    };
 
     this.changeAutoSearch = function() {
         this.redoSearch(!self.autoSearch());
         return true;
-    }
+    };
 
     this.selectMarkerFromList = function (place) {
         placeId = place.placeId();
@@ -81,7 +81,7 @@ var ViewModel = function() {
                 selectMarker(marker);
             }
         });
-    }
+    };
 
     //Function to Filter Markers using Search Term
     this.filterMarkers = function () {
@@ -102,7 +102,7 @@ var ViewModel = function() {
             }
         });
         updateList();
-    }
+    };
 };
 
 myViewModel = new ViewModel();
@@ -153,7 +153,7 @@ function getPlaces(center) {
         }
     }
     }).fail( function (e) {
-        document.getElementById('location-list-content').innerHTML = "Couldn't reach the Foursquare API. Something went wrong.";
+        document.getElementById("location-list-content").innerHTML = "Couldn't reach the Foursquare API. Something went wrong.";
     });
 }
 
