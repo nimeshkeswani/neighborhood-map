@@ -17,14 +17,14 @@
 			<div id="location-list">
 				<div id="location-list-header">
 						<div id="location-list-search">
-							<input id="auto-search" type="checkbox" checked><label>Auto Search</label>
-							<button id="redo-search" hidden>Redo Search</button>
+							<input id="auto-search" type="checkbox" data-bind="checked: autoSearch, click: changeAutoSearch"><label>Auto Search</label>
+							<button id="redo-search" data-bind="click: redoMapSearch" hidden>Redo Search</button>
 						</div>
 						<input id="location-list-filter" type="text" placeholder="Filter Results...">
 				</div>
 				<div id="location-list-content">
 					<ul id="marker-list" data-bind="foreach: placesList">
-				        <li class="marker-list-item" data-bind="text: title, click: selectMarkerFromList;"></li>
+				        <li class="marker-list-item" data-bind="text: title, click: selectMarkerFromList"></li>
 				    </ul>
 				    <h4 id="no-places-found" hidden>No Places found</h4>
 				</div>

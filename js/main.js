@@ -2,7 +2,6 @@
 var map;
 var center;
 var infoWindow;
-var autoSearch;
 var results = [];
 var markers = [];
 var currentMarker;
@@ -43,32 +42,12 @@ function initMap() {
         filterMarkers();
     });
 
-    //Add an event listener on the "Auto Redo Search" checkbox, to show/hide the "Redo Search" button
-    document.getElementById("auto-search").addEventListener("change", function() {
-         if (this.checked) {
-             document.getElementById("redo-search").hidden = true;
-         } else {
-             document.getElementById("redo-search").hidden = false;
-         }
-     });
-
-     //Add an event listener on the "Redo Search" button to search for places using the new center of the map
-     document.getElementById("redo-search").addEventListener("click", function() {
-         if (currentMarker) {
-            deselectMarker();
-        }
-         center = map.getCenter();
-         markerFilter.value = "";
-         getPlaces(center);
-     });
-
     google.maps.event.addListener(map, "dragend", function() {
         if (currentMarker) {
             deselectMarker();
         }
            center = map.getCenter();
-           autoSearch = document.getElementById("auto-search").checked;
-           if (autoSearch) {
+           if (myViewModel.autoSearch()) {
                markerFilter.value = "";
                getPlaces(center);
         }
@@ -76,21 +55,32 @@ function initMap() {
     getPlaces(center);
 }
 
-//Function to initialize the List
-function initList(results) {
-    var ViewModel = function() {
-        var self = this;
+//Knockout ViewModel
+var ViewModel = function() {
+    var self = this;
 
-        results.forEach(function(placeItem) {
-            placesList.push(new place(placeItem));
-        });
-    };
+    this.autoSearch = ko.observable(true);
 
-    ko.applyBindings(new ViewModel());
-}
+    this.redoSearch = ko.observable();
 
-//Initialize the List
-initList(results);
+    this.redoMapSearch = function () {
+        if (currentMarker) {
+            deselectMarker();
+        }
+        center = map.getCenter();
+        markerFilter.value = "";
+        getPlaces(center);
+    }
+
+    this.changeAutoSearch = function() {
+        document.getElementById("redo-search").hidden = self.autoSearch();
+        return true;
+    }
+};
+
+myViewModel = new ViewModel();
+
+ko.applyBindings(myViewModel);
 
 //Function to update the List
 function updateList() {
