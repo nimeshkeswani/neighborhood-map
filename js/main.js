@@ -6,7 +6,6 @@ var results = [];
 var markers = [];
 var currentMarker;
 var markerFilter = document.getElementById("location-list-filter");
-var placesList = ko.observableArray([]);
 var place = function(data) {
     this.placeId = ko.observable(data.placeId);
     this.title = ko.observable(data.title);
@@ -63,6 +62,8 @@ var ViewModel = function() {
 
     this.redoSearch = ko.observable(false);
 
+    this.placesList = ko.observableArray([]);
+
     this.redoMapSearch = function () {
         if (currentMarker) {
             deselectMarker();
@@ -76,6 +77,15 @@ var ViewModel = function() {
         this.redoSearch(!self.autoSearch());
         return true;
     }
+
+    this.selectMarkerFromList = function (place) {
+        placeId = place.placeId();
+        markers.forEach( function (marker) {
+            if (marker.placeId === placeId) {
+                selectMarker(marker);
+            }
+        });
+    }
 };
 
 myViewModel = new ViewModel();
@@ -84,10 +94,10 @@ ko.applyBindings(myViewModel);
 
 //Function to update the List
 function updateList() {
-    placesList([]);
+    myViewModel.placesList([]);
     markers.forEach(function(placeItem) {
         if (placeItem.map) {
-            placesList.push(new place(placeItem));
+            myViewModel.placesList.push(new place(placeItem));
         }
     });
 }
@@ -111,15 +121,6 @@ function filterMarkers() {
         }
     });
     updateList();
-}
-
-function selectMarkerFromList(place) {
-    placeId = place.placeId();
-    markers.forEach( function (marker) {
-        if (marker.placeId === placeId) {
-            selectMarker(marker);
-        }
-    });
 }
 
 //Function to get places using Nearby Search from Google JavaScript API

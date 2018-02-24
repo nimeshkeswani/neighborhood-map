@@ -24,7 +24,7 @@
 				</div>
 				<div id="location-list-content">
 					<ul id="marker-list" data-bind="foreach: placesList">
-				        <li class="marker-list-item" data-bind="text: title, click: selectMarkerFromList"></li>
+				        <li class="marker-list-item" data-bind="text: title, click: $parent.selectMarkerFromList"></li>
 				    </ul>
 				    <h4 id="no-places-found" hidden>No Places found</h4>
 				</div>
