@@ -18,7 +18,7 @@ var place = function(data) {
 
 //Function when map fails to load
 function errorMap(e) {
-    document.getElementById('map').innerHTML = "Couldn't loap the Map. Something Went Wrong.";
+    document.getElementById('map').innerHTML = "Couldn't loap the Map. Something went wrong.";
 }
 
 //Function to initialize the map
@@ -30,9 +30,7 @@ function initMap() {
 
     center = map.getCenter();
 
-    infoWindow = new google.maps.InfoWindow({
-        content: "<h4><a id='location-website' href=''></a></h4><img id='location-image'><br><br><span id='location-vicinity'></span><br><br>Powered by: <img src='static/images/foursquare.png' style='height: 20px;'>"
-    });
+    infoWindow = new google.maps.InfoWindow();
 
     google.maps.event.addListener(infoWindow, "closeclick", function() {
        if (currentMarker) {
@@ -167,8 +165,8 @@ function getPlaces(center) {
             }
         }
     }
-    }).fail( function () {
-        console.log("Something went Wrong.");
+    }).fail( function (e) {
+        document.getElementById('location-list-content').innerHTML = "Couldn't reach the Foursquare API. Something went wrong.";
     });
 }
 
@@ -261,31 +259,35 @@ function getPlaceDetails(marker, placeId) {
             }
         }
     }
-    }).fail( function () {
-        console.log("Something went Wrong.");
+    }).fail( function (e) {
+        infoWindow.open(map, marker);
+        content = "Couldn't get place details from the Foursquare API. Something went wrong.";
+        infoWindow.setContent(content);
     });
 
     function detailsCallback(place) {
-        infoWindow.open(map, marker);
-          if (place.name) {
-              document.getElementById("location-website").innerHTML = place.name;
-          } else {
-              document.getElementById("location-website").innerHTML = "";
-          }
-          if (place.url) {
-              document.getElementById("location-website").href = place.url;
-          } else {
-              document.getElementById("location-website").href = "#";
-          }
-          if (place.location) {
-              document.getElementById("location-vicinity").innerHTML = place.location.address + " " + place.location.city + " " + place.location.country;
-          } else {
-              document.getElementById("location-vicinity").innerHTML = "";
-          }
-          if (place.photos.groups[0]) {
-            document.getElementById("location-image").src = place.photos.groups[0].items[0].prefix + "200x200" + place.photos.groups[0].items[0].suffix;
+        if (place.name) {
+            place_name = place.name;
         } else {
-            document.getElementById("location-image").src = "";
+            place_name = "";
         }
+        if (place.url) {
+            place_url = place.url;
+        } else {
+            place_url = "#";
+        }
+        if (place.location) {
+            place_location = place.location.address + " " + place.location.city + " " + place.location.country;
+        } else {
+            place_location = "";
+        }
+        if (place.photos.groups[0]) {
+            place_photo_url = place.photos.groups[0].items[0].prefix + "200x200" + place.photos.groups[0].items[0].suffix;
+        } else {
+            place_photo_url = "";
+        }
+        infoWindow.open(map, marker);
+        content = "<h4><a id='location-website' href='" + place_url + "'>" + place_name + "</a></h4><img id='location-image' src='" + place_photo_url + "'><br><br><span id='location-vicinity'>" + place_location + "</span><br><br>Powered by: <img src='static/images/foursquare.png' style='height: 20px;'>";
+        infoWindow.setContent(content);
     }
 }
