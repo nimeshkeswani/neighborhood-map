@@ -61,7 +61,7 @@ var ViewModel = function() {
 
     this.autoSearch = ko.observable(true);
 
-    this.redoSearch = ko.observable();
+    this.redoSearch = ko.observable(false);
 
     this.redoMapSearch = function () {
         if (currentMarker) {
@@ -73,7 +73,7 @@ var ViewModel = function() {
     }
 
     this.changeAutoSearch = function() {
-        document.getElementById("redo-search").hidden = self.autoSearch();
+        this.redoSearch(!self.autoSearch());
         return true;
     }
 };

@@ -18,7 +18,7 @@
 				<div id="location-list-header">
 						<div id="location-list-search">
 							<input id="auto-search" type="checkbox" data-bind="checked: autoSearch, click: changeAutoSearch"><label>Auto Search</label>
-							<button id="redo-search" data-bind="click: redoMapSearch" hidden>Redo Search</button>
+							<button id="redo-search" data-bind="visible: redoSearch, click: redoMapSearch">Redo Search</button>
 						</div>
 						<input id="location-list-filter" type="text" placeholder="Filter Results...">
 				</div>
