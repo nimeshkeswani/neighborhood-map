@@ -16,6 +16,11 @@ var place = function(data) {
     this.animation = ko.observable(data.animation);
 };
 
+//Function when map fails to load
+function errorMap(e) {
+    document.getElementById('map').innerHTML = "Couldn't loap the Map. Something Went Wrong.";
+}
+
 //Function to initialize the map
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
