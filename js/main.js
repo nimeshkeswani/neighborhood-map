@@ -5,7 +5,6 @@ var infoWindow;
 var results = [];
 var markers = [];
 var currentMarker;
-var markerFilter = document.getElementById("location-list-filter");
 var place = function(data) {
     this.placeId = ko.observable(data.placeId);
     this.title = ko.observable(data.title);
@@ -36,18 +35,13 @@ function initMap() {
         }
     });
 
-    //Add an event listener on the Filter Text Box
-    markerFilter.addEventListener("keyup", function() {
-        filterMarkers();
-    });
-
     google.maps.event.addListener(map, "dragend", function() {
         if (currentMarker) {
             deselectMarker();
         }
            center = map.getCenter();
            if (myViewModel.autoSearch()) {
-               markerFilter.value = "";
+               myViewModel.markerFilter('');
                getPlaces(center);
         }
     });
@@ -64,12 +58,14 @@ var ViewModel = function() {
 
     this.placesList = ko.observableArray([]);
 
+    this.markerFilter = ko.observable("");
+
     this.redoMapSearch = function () {
         if (currentMarker) {
             deselectMarker();
         }
         center = map.getCenter();
-        markerFilter.value = "";
+        myViewModel.markerFilter('');;
         getPlaces(center);
     }
 
@@ -86,6 +82,27 @@ var ViewModel = function() {
             }
         });
     }
+
+    //Function to Filter Markers using Search Term
+    this.filterMarkers = function () {
+        var searchTerm = self.markerFilter().toLowerCase();
+        markers.forEach( function (marker) {
+            if (!marker.title.toLowerCase().includes(searchTerm)) {
+                if (currentMarker && currentMarker.placeId === marker.placeId) {
+                    infoWindow.close();
+                    deselectMarker();
+                }
+                marker.setMap(null);
+            }
+            else {
+                if (!marker.map) {
+                    marker.setMap(map);
+                    marker.setAnimation(google.maps.Animation.DROP);
+                }
+            }
+        });
+        updateList();
+    }
 };
 
 myViewModel = new ViewModel();
@@ -100,27 +117,6 @@ function updateList() {
             myViewModel.placesList.push(new place(placeItem));
         }
     });
-}
-
-//Function to Filter Markers using Search Term
-function filterMarkers() {
-    var searchTerm = markerFilter.value.toLowerCase();
-    markers.forEach( function (marker) {
-        if (!marker.title.toLowerCase().includes(searchTerm)) {
-            if (currentMarker && currentMarker.placeId === marker.placeId) {
-                infoWindow.close();
-                deselectMarker();
-            }
-            marker.setMap(null);
-        }
-        else {
-            if (!marker.map) {
-                marker.setMap(map);
-                marker.setAnimation(google.maps.Animation.DROP);
-            }
-        }
-    });
-    updateList();
 }
 
 //Function to get places using Nearby Search from Google JavaScript API

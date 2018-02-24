@@ -20,7 +20,7 @@
 							<input id="auto-search" type="checkbox" data-bind="checked: autoSearch, click: changeAutoSearch"><label>Auto Search</label>
 							<button id="redo-search" data-bind="visible: redoSearch, click: redoMapSearch">Redo Search</button>
 						</div>
-						<input id="location-list-filter" type="text" placeholder="Filter Results...">
+						<input id="location-list-filter" type="text" data-bind="value: markerFilter, valueUpdate: 'keyup', event: { keyup: filterMarkers } " placeholder="Filter Results...">
 				</div>
 				<div id="location-list-content">
 					<ul id="marker-list" data-bind="foreach: placesList">
